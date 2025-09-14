@@ -1,0 +1,71 @@
+<div class="container">
+  <h1>Student Management</h1>
+  <div class="form-container">
+    <h2>{{ isEditMode ? 'Edit Student' : 'Add New Student' }}</h2>
+    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label for="student_name">Student Name</label>
+        <input id="student_name" type="text" formControlName="student_name">
+      </div>
+      <div>
+        <label for="city">City (Dropdown)</label>
+        <select id="city" formControlName="city">
+          <option value="" disabled>Select a city</option>
+          <option *ngFor="let city of cities" [value]="city">{{ city }}</option>
+        </select>
+      </div>
+      <div>
+        <label for="address">Address (Textarea)</label>
+        <textarea id="address" formControlName="address" rows="3"></textarea>
+      </div>
+      <div>
+        <label for="birth_date">Birth Date (Date Picker)</label>
+        <input id="birth_date" type="date" formControlName="birth_date">
+      </div>
+      <div>
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="is_active"> Is Active
+        </label>
+      </div>
+      <div class="buttons">
+        <button type="submit" [disabled]="studentForm.invalid">{{ isEditMode ? 'Update' : 'Submit' }}</button>
+        <button type="button" (click)="resetForm()">Reset</button>
+        <button type="button" (click)="onCancel()">Cancel</button>
+      </div>
+    </form>
+  </div>
+  <div *ngIf="selectedStudent" class="view-container">
+    <h2>Student Details</h2>
+    <p><strong>Name:</strong> {{ selectedStudent.student_name }}</p>
+    <p><strong>City:</strong> {{ selectedStudent.city }}</p>
+    <p><strong>Address:</strong> {{ selectedStudent.address }}</p>
+    <p><strong>Birth Date:</strong> {{ selectedStudent.birth_date | date }}</p>
+    <p><strong>Status:</strong> {{ selectedStudent.is_active ? 'Active' : 'Inactive' }}</p>
+    <button (click)="selectedStudent = null">Close</button>
+  </div>
+  <div class="list-container">
+    <h2>Student List</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>City</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>{{ student.student_name }}</td>
+          <td>{{ student.city }}</td>
+          <td>{{ student.is_active ? 'Active' : 'Inactive' }}</td>
+          <td class="actions">
+            <button (click)="onView(student)">View</button>
+            <button (click)="onEdit(student)">Edit</button>
+            <button class="delete" (click)="onDelete(student.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
